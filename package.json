@@ -1,0 +1,36 @@
+{
+  "name": "webcheck-follow",
+  "version": "0.0.2",
+  "description": "Arne Schubert <atd.schubert@gmail.com>",
+  "main": "webcheck-follow.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "webcheck": "~1.0.0"
+  },
+  "devDependencies": {
+    "express": "^4.13.3",
+    "freeport": "^1.0.5"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atd-schubert/webcheck-follow.git"
+  },
+  "keywords": [
+    "webcheck",
+    "follow",
+    "html",
+    "css",
+    "xml"
+  ],
+  "author": "Arne Schubert <atd.schubert@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atd-schubert/webcheck-follow/issues"
+  },
+  "homepage": "https://github.com/atd-schubert/webcheck-follow#readme"
+}
