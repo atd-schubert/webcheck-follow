@@ -1,7 +1,7 @@
 {
   "name": "webcheck-follow",
-  "version": "0.0.2",
-  "description": "Arne Schubert <atd.schubert@gmail.com>",
+  "version": "0.0.3",
+  "description": "A plugin for webcheck to follow resources automatically",
   "main": "webcheck-follow.js",
   "directories": {
     "test": "test"
