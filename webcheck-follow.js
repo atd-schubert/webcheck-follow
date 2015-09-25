@@ -67,7 +67,7 @@ var MirrorPlugin = function (opts) {
             lastTwo = lastChunk + str;
             lastChunk = str;
 
-            completeUrls = lastTwo.match(/(http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*/g) || [];
+            completeUrls = lastTwo.match(/(http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$\=~])*/g) || [];
             hrefs = lastTwo.match(/(href="((http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?)?[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*")/g) || [];
             srcs = lastTwo.match(/(src="((http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?)?[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*")/g) || [];
             css = lastTwo.match(/(url\("?'?((http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?)?[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*"?'?\))/g) || [];
@@ -79,6 +79,7 @@ var MirrorPlugin = function (opts) {
             }
             for (i = 0; i < hrefs.length; i += 1) {
                 tmpUrl = hrefs[i].substring(6, hrefs[i].length - 1);
+                tmpUrl = tmpUrl.split('#')[0];
                 tmpUrl = url.resolve(result.url, tmpUrl);
                 if (opts.filterFollowUrl.test(tmpUrl)) {
                     list[tmpUrl] = true;
@@ -86,6 +87,7 @@ var MirrorPlugin = function (opts) {
             }
             for (i = 0; i < srcs.length; i += 1) {
                 tmpUrl = srcs[i].substring(5, srcs[i].length - 1);
+                tmpUrl = tmpUrl.split('#')[0];
                 tmpUrl = url.resolve(result.url, tmpUrl);
                 if (opts.filterFollowUrl.test(tmpUrl)) {
                     list[tmpUrl] = true;
@@ -99,6 +101,7 @@ var MirrorPlugin = function (opts) {
                 if (/"|'/.test(tmpUrl.substr(-1))) {
                     tmpUrl = tmpUrl.substring(0, tmpUrl.length - 1);
                 }
+                tmpUrl = tmpUrl.split('#')[0];
                 tmpUrl = url.resolve(result.url, tmpUrl);
                 if (opts.filterFollowUrl.test(tmpUrl)) {
                     list[tmpUrl] = true;
