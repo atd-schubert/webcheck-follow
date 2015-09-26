@@ -27,6 +27,14 @@ var logError = function (err) {
     }
 };
 
+var decode = function (str) {
+    return decodeURIComponent(str.split('&amp;').join('&')
+        .split('&gt;').join('>')
+        .split('&lt;').join('<')
+        .split('&quot;').join('"')
+        .split('&#39;').join('\''));
+};
+
 /**
  * Mirroring plugin for webcheck.
  * Mirror content to directory structure.
@@ -73,6 +81,7 @@ var MirrorPlugin = function (opts) {
             css = lastTwo.match(/(url\("?'?((http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?)?[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*"?'?\))/g) || [];
 
             for (i = 0; i < completeUrls.length; i += 1) {
+                completeUrls[i] = decode(completeUrls[i]);
                 if (opts.filterFollowUrl.test(completeUrls[i])) {
                     list[completeUrls[i]] = true;
                 }
@@ -80,7 +89,7 @@ var MirrorPlugin = function (opts) {
             for (i = 0; i < hrefs.length; i += 1) {
                 tmpUrl = hrefs[i].substring(6, hrefs[i].length - 1);
                 tmpUrl = tmpUrl.split('#')[0];
-                tmpUrl = url.resolve(result.url, tmpUrl);
+                tmpUrl = url.resolve(result.url, decode(tmpUrl));
                 if (opts.filterFollowUrl.test(tmpUrl)) {
                     list[tmpUrl] = true;
                 }
@@ -88,7 +97,7 @@ var MirrorPlugin = function (opts) {
             for (i = 0; i < srcs.length; i += 1) {
                 tmpUrl = srcs[i].substring(5, srcs[i].length - 1);
                 tmpUrl = tmpUrl.split('#')[0];
-                tmpUrl = url.resolve(result.url, tmpUrl);
+                tmpUrl = url.resolve(result.url, decode(tmpUrl));
                 if (opts.filterFollowUrl.test(tmpUrl)) {
                     list[tmpUrl] = true;
                 }
