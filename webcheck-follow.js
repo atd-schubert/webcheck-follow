@@ -28,11 +28,25 @@ var logError = function (err) {
 };
 
 var decode = function (str) {
-    return decodeURIComponent(str.split('&amp;').join('&')
-        .split('&gt;').join('>')
-        .split('&lt;').join('<')
-        .split('&quot;').join('"')
-        .split('&#39;').join('\''));
+    try {
+        return decodeURIComponent(str.split('&amp;').join('&')
+            .split('&gt;').join('>')
+            .split('&lt;').join('<')
+            .split('&quot;').join('"')
+            .split('&#39;').join('\''));
+    } catch (err) {
+        console.error('Error parsing URI!', str, err);
+    }
+    try {
+        return str.split('&amp;').join('&')
+            .split('&gt;').join('>')
+            .split('&lt;').join('<')
+            .split('&quot;').join('"')
+            .split('&#39;').join('\'');
+    } catch (err) {
+        console.error('Error parsing URI without component!', str, err);
+    }
+    return str;
 };
 
 /**
