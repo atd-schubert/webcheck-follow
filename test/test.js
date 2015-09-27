@@ -29,7 +29,7 @@ describe('Mirror Plugin', function () {
             res.send('<html><head></head><body><a href="href-works.txt#hash">Link</a><img src="src-works.txt#hash" /> Just a fix URL: https://github.com/atd-schubert#index url("css-works.txt#hash")</body></html>');
         });
         app.get('/escaped.html', function (req, res) {
-            res.send('<html><head></head><body><a href="href-works.txt?first&amp;test=second#hash">Link</a><img src="src-works.txt?first&amp;test=second#hash" /> Just a fix URL: https://github.com/atd-schubert?test&amp;another#index url("css-works.txt#hash")</body></html>');
+            res.send('<html><head></head><body><a href="href-works.txt?first&amp;test=second#hash">Link</a><img src="src-works.txt?first&amp;test=second#hash" /> Just a fix URL: https://github.com/atd-schubert?test&amp;another#index url("css-works.txt#hash") <a href="/malformed%20ac%E7%F5es%20.html">Malformed</a></body></html>');
         });
         /*jslint unparam: false*/
 
@@ -152,8 +152,8 @@ describe('Mirror Plugin', function () {
                 }
             });
         });
-        it('should parse escaped characters in sttributes urls', function (done) {
-            var full, src, href, css, listener;
+        it('should parse escaped characters in attributes urls', function (done) {
+            var full, src, href, css, listener, malformed;
 
             listener = function (settings) {
                 if (settings.url === 'https://github.com/atd-schubert?test&another') {
@@ -168,9 +168,13 @@ describe('Mirror Plugin', function () {
                 } else if (settings.url === 'http://localhost:' + port + '/css-works.txt') {
                     settings.preventCrawl = true;
                     css = true;
+                } else if (settings.url === 'http://localhost:' + port + '/malformed%20ac%E7%F5es%20.html') {
+                    console.log(settings.url);
+                    settings.preventCrawl = true;
+                    malformed = true;
                 }
 
-                if (href && src && full && css) {
+                if (href && src && full && css && malformed) {
                     webcheck.removeListener('crawl', listener);
                     return done();
                 }
