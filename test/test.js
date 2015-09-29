@@ -10,7 +10,7 @@ var Webcheck = require('webcheck');
 var freeport = require('freeport');
 var express = require('express');
 
-describe('Mirror Plugin', function () {
+describe('Follow Plugin', function () {
     var port;
     before(function (done) {
         var app = express();

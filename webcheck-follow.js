@@ -36,8 +36,7 @@ var decode = function (str) {
 };
 
 /**
- * Mirroring plugin for webcheck.
- * Mirror content to directory structure.
+ * Webcheck plugin to follow urls.
  * @author Arne Schubert <atd.schubert@gmail.com>
  * @param {{}} [opts] - Options for this plugin
  * @param {RegExp|{test:Function}} [opts.filterContentType] - Follow only in matching content-type
@@ -47,7 +46,7 @@ var decode = function (str) {
  * @augments Webcheck.Plugin
  * @constructor
  */
-var MirrorPlugin = function (opts) {
+var FollowPlugin = function (opts) {
     var self;
 
     self = this;
@@ -134,9 +133,9 @@ var MirrorPlugin = function (opts) {
     };
 };
 
-MirrorPlugin.prototype = {
+FollowPlugin.prototype = {
     '__proto__': WebcheckPlugin.prototype,
     package: pkg
 };
 
-module.exports = MirrorPlugin;
+module.exports = FollowPlugin;
