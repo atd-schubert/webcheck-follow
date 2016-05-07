@@ -1,39 +1,36 @@
-/*jslint node:true*/
+/// <reference path="../typings/main.d.ts" />
 
-/*global describe, it, before, after, beforeEanonsenseach*/
+import { FollowPlugin } from '../webcheck-follow';
+import {Webcheck, ICrawlOptions} from 'webcheck';
+import * as freeport from 'freeport';
+import * as express from 'express';
 
-'use strict';
+/* tslint:disable:align */
 
-var FollowPlugin = require('../');
+describe('Follow Plugin', (): void => {
+    var port: number;
+    before((done: MochaDone): void => {
+        var app: express.Application = express();
 
-var Webcheck = require('webcheck');
-var freeport = require('freeport');
-var express = require('express');
-
-describe('Follow Plugin', function () {
-    var port;
-    before(function (done) {
-        var app = express();
-
-        /*jslint unparam: true*/
-        app.get('/test.css', function (req, res) {
+        /* tslint:disable:max-line-length */
+        app.get('/test.css', (req: express.Request, res: express.Response): void => {
             res.set('Content-Type', 'text/css').send('#id { background-image: url("works.txt"); }');
         });
-        app.get('/test.txt', function (req, res) {
+        app.get('/test.txt', (req: express.Request, res: express.Response): void => {
             res.set('Content-Type', 'text/plain').send('Just a url: https://github.com/atd-schubert');
         });
-        app.get('/test.html', function (req, res) {
+        app.get('/test.html', (req: express.Request, res: express.Response): void => {
             res.send('<html><head></head><body><a href="href-works.txt">Link</a><img src="src-works.txt" /> Just a fix URL: https://github.com/atd-schubert</body></html>');
         });
-        app.get('/hash.html', function (req, res) {
+        app.get('/hash.html', (req: express.Request, res: express.Response): void => {
             res.send('<html><head></head><body><a href="href-works.txt#hash">Link</a><img src="src-works.txt#hash" /> Just a fix URL: https://github.com/atd-schubert#index url("css-works.txt#hash")</body></html>');
         });
-        app.get('/escaped.html', function (req, res) {
+        app.get('/escaped.html', (req: express.Request, res: express.Response): void => {
             res.send('<html><head></head><body><a href="href-works.txt?first&amp;test=second#hash">Link</a><img src="src-works.txt?first&amp;test=second#hash" /> Just a fix URL: https://github.com/atd-schubert?test&amp;another#index url("css-works.txt#hash") <a href="/malformed%20ac%E7%F5es%20.html">Malformed</a></body></html>');
         });
-        /*jslint unparam: false*/
+        /* tslint:enable:max-line-length */
 
-        freeport(function (err, p) {
+        freeport((err: Error, p: number): void => {
             if (err) {
                 done(err);
             }
@@ -42,20 +39,24 @@ describe('Follow Plugin', function () {
             done();
         });
     });
-    describe('Default settings', function () {
-        var webcheck, plugin;
+    describe('Default settings', (): void => {
+        var webcheck: Webcheck,
+            plugin: FollowPlugin;
 
-        before(function () {
-            webcheck = new Webcheck();
+        before((): void => {
+            webcheck = new Webcheck({});
             plugin = new FollowPlugin();
             webcheck.addPlugin(plugin);
             plugin.enable();
         });
 
-        it('should follow src, href and full urls', function (done) {
-            var src, href, full, listener;
+        it('should follow src, href and full urls', (done: MochaDone): void => {
+            var src: boolean,
+                href: boolean,
+                full: boolean,
+                listener: Function;
 
-            listener = function (settings) {
+            listener = (settings: ICrawlOptions): void => {
                 if (settings.url === 'https://github.com/atd-schubert') {
                     settings.preventCrawl = true;
                     full = true;
@@ -74,16 +75,16 @@ describe('Follow Plugin', function () {
             webcheck.on('crawl', listener);
             webcheck.crawl({
                 url: 'http://localhost:' + port + '/test.html'
-            }, function (err) {
+            }, (err: Error): void => {
                 if (err) {
                     return done(err);
                 }
             });
         });
-        it('should find urls in css', function (done) {
-            var listener;
+        it('should find urls in css', (done: MochaDone): void => {
+            var listener: Function;
 
-            listener = function (settings) {
+            listener = (settings: ICrawlOptions): void => {
                 if (settings.url === 'http://localhost:' + port + '/works.txt') {
                     settings.preventCrawl = true;
                     webcheck.removeListener('crawl', listener);
@@ -93,15 +94,16 @@ describe('Follow Plugin', function () {
             webcheck.on('crawl', listener);
             webcheck.crawl({
                 url: 'http://localhost:' + port + '/test.css'
-            }, function (err) {
+            }, (err: Error): void => {
                 if (err) {
                     return done(err);
                 }
             });
         });
-        it('should find urls text', function (done) {
-            var found, listener;
-            listener = function (settings) {
+        it('should find urls text', (done: MochaDone): void => {
+            var found: boolean,
+                listener: Function;
+            listener = (settings: ICrawlOptions): void => {
                 if (settings.url === 'https://github.com/atd-schubert') {
                     settings.preventCrawl = true;
                     if (!found) {
@@ -114,16 +116,20 @@ describe('Follow Plugin', function () {
             webcheck.on('crawl', listener);
             webcheck.crawl({
                 url: 'http://localhost:' + port + '/test.txt'
-            }, function (err) {
+            }, (err: Error): void => {
                 if (err) {
                     return done(err);
                 }
             });
         });
-        it('should find urls with hash', function (done) {
-            var full, src, href, css, listener;
+        it('should find urls with hash', (done: MochaDone): void => {
+            var full: boolean,
+                src: boolean,
+                href: boolean,
+                css: boolean,
+                listener: Function;
 
-            listener = function (settings) {
+            listener = (settings: ICrawlOptions): void => {
                 if (settings.url === 'https://github.com/atd-schubert') {
                     settings.preventCrawl = true;
                     full = true;
@@ -146,16 +152,21 @@ describe('Follow Plugin', function () {
             webcheck.on('crawl', listener);
             webcheck.crawl({
                 url: 'http://localhost:' + port + '/hash.html'
-            }, function (err) {
+            }, (err: Error): void => {
                 if (err) {
                     return done(err);
                 }
             });
         });
-        it('should parse escaped characters in attributes urls', function (done) {
-            var full, src, href, css, listener, malformed;
+        it('should parse escaped characters in attributes urls', (done: MochaDone): void => {
+            var full: boolean,
+                src: boolean,
+                href: boolean,
+                css: boolean,
+                listener: Function,
+                malformed: boolean;
 
-            listener = function (settings) {
+            listener = (settings: ICrawlOptions): void => {
                 if (settings.url === 'https://github.com/atd-schubert?test&another') {
                     settings.preventCrawl = true;
                     full = true;
@@ -182,7 +193,7 @@ describe('Follow Plugin', function () {
             webcheck.on('crawl', listener);
             webcheck.crawl({
                 url: 'http://localhost:' + port + '/escaped.html'
-            }, function (err) {
+            }, (err: Error): void => {
                 if (err) {
                     return done(err);
                 }

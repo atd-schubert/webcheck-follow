@@ -1,0 +1,16 @@
+{
+  "ambientDependencies": {
+    "async": "registry:dt/async#1.4.2+20160316155526",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
+    "form-data": "registry:dt/form-data#0.0.0+20160316155526",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "node": "registry:dt/node#4.0.0+20160423143914",
+    "request": "registry:dt/request#0.0.0+20160316155526",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160501131543"
+  },
+  "ambientDevDependencies": {
+    "express": "registry:dt/express#4.0.0+20160317120654",
+    "freeport": "registry:dt/freeport#1.0.5+20160403124405",
+    "mocha": "registry:dt/mocha#2.2.5+20160317120654"
+  }
+}
